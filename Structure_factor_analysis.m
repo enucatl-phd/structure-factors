@@ -1,7 +1,3 @@
-clear;
-clear all;
-addpath('../functions');
-
 %% Physical parameters
 re= 2.8179403267e-15;
 E=25;
