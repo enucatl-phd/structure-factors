@@ -34,7 +34,4 @@ setup(
         'scipy',
         'nist_lookup',
     ],
-    dependency_links=[
-        'git+ssh://git@git.psi.ch:tomcat/nist_lookup.git@v2.11',
-    ]
 )
