@@ -1,4 +1,5 @@
 numpy
 scipy
 click
+matplotlib
 git+ssh://git@git.psi.ch/tomcat/nist_lookup.git#egg=nist_lookup

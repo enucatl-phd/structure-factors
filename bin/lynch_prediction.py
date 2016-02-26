@@ -56,8 +56,8 @@ def main(
         background_material,
         background_density,
         energy * 1e3)
-    delta_chi_squared = (delta_sphere - delta_background) ** 2 + (beta_sphere -
-                                                          beta_background)
+    delta_chi_squared = ((delta_sphere - delta_background) ** 2 +
+                         (beta_sphere - beta_background) ** 2)
     dfec = lynch.dark_field_extinction_coefficient(
         wavelength,
         grating_pitch,

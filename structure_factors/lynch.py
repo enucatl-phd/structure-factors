@@ -11,7 +11,7 @@ def d_prime_yashiro(d_prime):
     """
     return (
         d_prime -
-        np.sqrt(d_prime ** 2 - 1) * (1 + 2 / d_prime ** 2) +
+        np.sqrt(d_prime ** 2 - 1) * (1 + 1 / (2 * d_prime ** 2)) +
         (1 / d_prime - 1 / (4 * d_prime ** 3)) *
         np.log(
             (d_prime + np.sqrt(d_prime ** 2 - 1)) /
