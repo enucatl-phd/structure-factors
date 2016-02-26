@@ -34,4 +34,8 @@ setup(
         'scipy',
         'nist_lookup',
     ],
+    entry_points="""
+    [console_scripts]
+    lynch_prediction = bin.lynch_prediction:main
+    """
 )
