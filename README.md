@@ -9,5 +9,5 @@ ln -s ../../pre-commit .git/hooks/pre-commit
 # Check code with pep8
 
 ```bash
-ln -s .git/hooks/pre-commit ../../pre-commit
+ln -s ../../pre-commit .git/hooks/pre-commit 
 ```
