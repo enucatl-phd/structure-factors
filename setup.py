@@ -37,6 +37,7 @@ setup(
     entry_points="""
     [console_scripts]
     lynch_prediction = bin.lynch_prediction:main
+    saxs_prediction = bin.saxs_prediction:main
     quick_plot = bin.quick_plot:main
     """
 )

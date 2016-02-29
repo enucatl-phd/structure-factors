@@ -3,7 +3,7 @@ import csv
 import numpy as np
 from scipy import constants
 
-import structure_factors.lynch as lynch
+import structure_factors.saxs as saxs
 from nist_lookup import xraydb_plugin as xdb
 
 
@@ -57,18 +57,29 @@ def main(
         background_material,
         background_density,
         energy * 1e3)
-    delta_chi_squared = ((delta_sphere - delta_background) ** 2 +
-                         (beta_sphere - beta_background) ** 2)
-    dfec = lynch.dark_field_extinction_coefficient(
-        wavelength,
-        grating_pitch,
-        intergrating_distance,
-        diameters,
-        volume_fraction,
-        delta_chi_squared
+    delta_chi_squared = (
+        (delta_sphere - delta_background) ** 2 +
+        (beta_sphere - beta_background) ** 2
     )
 
+    autocorrelation_length = wavelength * intergrating_distance / grating_pitch
+    n = 2048
+    real_space_sampling = np.linspace(
+        -4 * autocorrelation_length,
+        4 * autocorrelation_length,
+        n,
+        endpoint=False,
+    )
     output_csv = csv.writer(output)
     output_csv.writerow(["diameter", "dfec"])
-    for diameter, mu in zip(diameters, dfec):
-        output_csv.writerow([diameter, mu])
+    for diameter in diameters:
+        dfec = saxs.dark_field_extinction_coefficient(
+            wavelength,
+            grating_pitch,
+            intergrating_distance,
+            diameter,
+            volume_fraction,
+            delta_chi_squared,
+            real_space_sampling
+        )
+        output_csv.writerow([diameter, dfec])

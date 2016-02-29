@@ -3,7 +3,7 @@ re= 2.8179403267e-15;
 E=25;
 L=12e-2;
 p2=2e-6;
-R=1.86e-6/2;
+R=2e-6;
 fv=0.4;
 %
 lambda=12.4/E*1e-10;
@@ -25,7 +25,7 @@ Delta_chi=delta+j*beta;
 %% Sampling
 
 N=512*2*2;
-Range=4*2*epsilon;
+Range=10*2*epsilon;
 Delta_s=Range/N;
 x=(-N/2:N/2-1)*Delta_s;
 f=(-N/2:N/2-1)/(N*Delta_s);
@@ -39,7 +39,8 @@ Q=2*pi*F;
 %% Form Factor
 
 PQ=(SphereFormFactor2(Q,R)).^2;
-SQ=HardSphereStructureFactor2(Q,R,fv);
+SQ=1;
+%SQ=HardSphereStructureFactor2(Q,R,fv);
 
 %I=PQ;
 %I=fv*Delta_chi*conj(Delta_chi)*Vs*PQ;
@@ -51,8 +52,8 @@ I=fv*Delta_chi*conj(Delta_chi)*Vs*PQ.*SQ;
 
 autocorrelation=k^2*ift2(I,1/(N*Delta_s));
 
-figure(3);imagesc(autocorrelation);
-figure(4);plot(X(N/2+1,:),autocorrelation(N/2+1,:));
+%figure(3);imagesc(autocorrelation);
+%figure(4);plot(X(N/2+1,:),autocorrelation(N/2+1,:));
 
 %% DFEC from autocorrelation
 
@@ -64,6 +65,8 @@ clear sampling test;
 
 autocorrelation_1=interp1(position,corr_values,epsilon)
 mu_d_exp=corr_values(1)-autocorrelation_1
+
+
 
 %% DFEC from the S.K. Lynch calculation
 
