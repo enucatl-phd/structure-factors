@@ -3,8 +3,14 @@ import csv
 import numpy as np
 from scipy import constants
 
+import logging
+import logging.config
+from structure_factors.logger_config import config_dictionary
+
 import structure_factors.saxs as saxs
 from nist_lookup import xraydb_plugin as xdb
+
+log = logging.getLogger()
 
 
 @click.command()
@@ -32,6 +38,10 @@ from nist_lookup import xraydb_plugin as xdb
               help="density of the material of the background [g/cm³]")
 @click.option("--output", type=click.File("w"), default="-",
               help="output file for the csv data")
+@click.option("--sampling", type=int, default=2048,
+              help="""
+              number of cells for the sampling of real and fourier space""")
+@click.option("--verbose", is_flag=True, default=False)
 def main(
         energy,
         grating_pitch,
@@ -44,8 +54,14 @@ def main(
         sphere_density,
         background_material,
         background_density,
-        output
+        output,
+        sampling,
+        verbose
         ):
+    if verbose:
+        config_dictionary['handlers']['default']['level'] = 'DEBUG'
+        config_dictionary['loggers']['']['level'] = 'DEBUG'
+    logging.config.dictConfig(config_dictionary)
     wavelength = (constants.physical_constants["Planck constant in eV s"][0] *
                   constants.c / (energy * 1e3))
     diameters = np.arange(min_diameter, max_diameter, diameter_step)
@@ -63,11 +79,10 @@ def main(
     )
 
     autocorrelation_length = wavelength * intergrating_distance / grating_pitch
-    n = 2048
     real_space_sampling = np.linspace(
         -4 * autocorrelation_length,
         4 * autocorrelation_length,
-        n,
+        sampling,
         endpoint=False,
     )
     output_csv = csv.writer(output)

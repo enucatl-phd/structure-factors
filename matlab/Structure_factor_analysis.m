@@ -3,7 +3,7 @@ re= 2.8179403267e-15;
 E=25;
 L=12e-2;
 p2=2e-6;
-R=2e-6;
+R=1e-6;
 fv=0.4;
 %
 lambda=12.4/E*1e-10;
@@ -24,14 +24,14 @@ Delta_chi=delta+j*beta;
 
 %% Sampling
 
-N=512*2*2;
-Range=10*2*epsilon;
+N=1*2*2;
+Range=4*2*epsilon;
 Delta_s=Range/N;
 x=(-N/2:N/2-1)*Delta_s;
 f=(-N/2:N/2-1)/(N*Delta_s);
+fourier_sampling_step = 1 / (N * Delta_s)
 [X,Y]=meshgrid(x);
 [fx,fy]=meshgrid(f);
-clear f x;
 R_s=sqrt(X.^2+Y.^2);
 F=sqrt(fx.^2+fy.^2);
 Q=2*pi*F;
@@ -51,7 +51,6 @@ I=fv*Delta_chi*conj(Delta_chi)*Vs*PQ.*SQ;
 %% Real space autocorrelation
 
 autocorrelation=k^2*ift2(I,1/(N*Delta_s));
-
 %figure(3);imagesc(autocorrelation);
 %figure(4);plot(X(N/2+1,:),autocorrelation(N/2+1,:));
 
@@ -65,6 +64,7 @@ clear sampling test;
 
 autocorrelation_1=interp1(position,corr_values,epsilon)
 mu_d_exp=corr_values(1)-autocorrelation_1
+
 
 
 
