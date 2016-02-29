@@ -1,3 +1,11 @@
+# Install python 3 with pyenv
+
+See https://github.com/yyuu/pyenv-installer
+
+```bash
+pyenv install 3.5.1
+```
+
 # Install
 
 ```bash
