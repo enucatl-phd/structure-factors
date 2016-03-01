@@ -15,8 +15,9 @@ def sphere_form_factor(q, d):
     :d: diameter of the microspheres
     """
     a = q * d / 2
+    a = np.ma.array(a)
     form_factor = 3 / a ** 3 * (np.sin(a) - a * np.cos(a))
-    form_factor[a == 0] = 1 / 3
+    form_factor.filled(1 / 3)
     return form_factor
 
 
@@ -24,16 +25,17 @@ def g(a, f):
     alpha = ((1 + 2 * f) ** 2) / ((1 - f) ** 4)
     beta = -6 * f * (1 + (f / 2)) ** 2 / (1 - f) ** 4
     gamma = 0.5 * f * (1 + (2 * f) ** 2) / (1 - f) ** 4
-
-    result = (
+    a = np.ma.array(a)
+    result = ((
         alpha / (a ** 2) * (np.sin(a) - (a * np.cos(a))) +
         beta / (a ** 3) * ((2 * a * np.sin(a)) +
                            ((2 - (a ** 2)) * np.cos(a)) - 2) +
         gamma / (a ** 5) * (((-a ** 4) * np.cos(a)) +
                             (4 * (((3 * a ** 2 - 6) * np.cos(a)) +
                                   (np.sin(a) * (a ** 3 - 6 * a)) + 6)))
-    ) / a
-    result[a == 0] = alpha / 3 + beta / 4 + gamma / 6
+        ) / a
+    )
+    result.filled(alpha / 3 + beta / 4 + gamma / 6)
     return result
 
 
