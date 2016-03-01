@@ -56,7 +56,8 @@ def dark_field_extinction_coefficient(
         diameter,
         volume_fraction,
         delta_chi_squared,
-        real_space_sampling):
+        real_space_sampling,
+        structure_factor_function=lambda *args: 1):
     """
     Function to calculate the DFEC Coefficient
     For a spherical model from Appl Opt. 2011 Aug 1; 50(22):
@@ -75,6 +76,8 @@ def dark_field_extinction_coefficient(
             2048,
             endpoint=False,
         )
+    :structure_factor_function: a function of q, diameter, volume fraction
+    that calculates the relevant structure factor (defaults to 1)
     :returns: the dark field extinction coefficient μ_d
 
     """
@@ -100,7 +103,7 @@ def dark_field_extinction_coefficient(
 
     sphere_factor = sphere_form_factor(q, diameter) ** 2
     log.debug("sphere form factor %s", sphere_factor)
-    structure_factor = 1
+    structure_factor = structure_factor_function(q, diameter, f)
 
     intensity = (
         volume_fraction *
