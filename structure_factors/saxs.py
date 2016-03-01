@@ -11,32 +11,33 @@ def sphere_form_factor(q, d):
     spheres
     D.J. Kinning et al., Macromolecules 17 (1984) 1712
 
-    :q: 4*pi/lambda*sin(theta/2)
+    :q: 4 * pi / lambda * sin(theta / 2)
     :d: diameter of the microspheres
     """
     a = q * d / 2
     a = np.ma.array(a)
     form_factor = 3 / a ** 3 * (np.sin(a) - a * np.cos(a))
-    form_factor.filled(1 / 3)
-    return form_factor
+    return form_factor.filled(1 / 3)
 
 
 def g(a, f):
-    alpha = ((1 + 2 * f) ** 2) / ((1 - f) ** 4)
+    alpha = (1 + 2 * f) ** 2 / (1 - f) ** 4
     beta = -6 * f * (1 + (f / 2)) ** 2 / (1 - f) ** 4
-    gamma = 0.5 * f * (1 + (2 * f) ** 2) / (1 - f) ** 4
+    gamma = 0.5 * f * (1 + (2 * f)) ** 2 / (1 - f) ** 4
     a = np.ma.array(a)
-    result = ((
+    result = (
         alpha / (a ** 2) * (np.sin(a) - (a * np.cos(a))) +
-        beta / (a ** 3) * ((2 * a * np.sin(a)) +
-                           ((2 - (a ** 2)) * np.cos(a)) - 2) +
-        gamma / (a ** 5) * (((-a ** 4) * np.cos(a)) +
-                            (4 * (((3 * a ** 2 - 6) * np.cos(a)) +
-                                  (np.sin(a) * (a ** 3 - 6 * a)) + 6)))
-        ) / a
+        beta / (a ** 3) * (
+            (2 * a * np.sin(a)) +
+            ((2 - (a ** 2)) * np.cos(a)) - 2) +
+        gamma / (a ** 5) * (
+            -a ** 4 * np.cos(a) +
+            (4 * (((3 * a ** 2 - 6) * np.cos(a)) +
+                  ((a ** 3 - 6 * a) * np.sin(a)) + 6))
+        )
     )
-    result.filled(alpha / 3 + beta / 4 + gamma / 6)
-    return result
+    result /= a
+    return result.filled(alpha / 3 + beta / 4 + gamma / 6)
 
 
 def hard_sphere_structure_factor(q, d, f):
@@ -48,7 +49,9 @@ def hard_sphere_structure_factor(q, d, f):
     :d: diameter of the microspheres
     :f: fraction volume
     """
-    return 1 / (1 + (24 * f * g(q * d, f)))
+    sf = 1 / (1 + (24 * f * g(q * d, f)))
+    log.debug("hard sphere structure factor \n %s", sf)
+    return sf
 
 
 def dark_field_extinction_coefficient(
@@ -72,12 +75,12 @@ def dark_field_extinction_coefficient(
     :volume_fraction: fraction of the volume occupied by the microspheres
     :delta_chi_squared: difference in refractive index squared
     :real_space_sampling: sampling in real space, recommended value
-        np.linspace(
-            -4 * autocorrelation_length,
-            4 * autocorrelation_length,
-            2048,
-            endpoint=False,
-        )
+    np.linspace(
+    -4 * autocorrelation_length,
+    4 * autocorrelation_length,
+    2048,
+    endpoint=False,
+    )
     :structure_factor_function: a function of q, diameter, volume fraction
     that calculates the relevant structure factor (defaults to 1)
     :returns: the dark field extinction coefficient μ_d
@@ -104,8 +107,8 @@ def dark_field_extinction_coefficient(
     q = 2 * np.pi * f
 
     sphere_factor = sphere_form_factor(q, diameter) ** 2
-    log.debug("sphere form factor %s", sphere_factor)
-    structure_factor = structure_factor_function(q, diameter, f)
+    log.debug("sphere form factor \n %s", sphere_factor)
+    structure_factor = structure_factor_function(q, diameter, volume_fraction)
 
     intensity = (
         volume_fraction *
