@@ -57,11 +57,25 @@ def dark_field_extinction_coefficient(
         volume_fraction,
         delta_chi_squared,
         real_space_sampling):
-    """TODO: Docstring for autocorrelation.
-    # n = even
+    """
+    Function to calculate the DFEC Coefficient
+    For a spherical model from Appl Opt. 2011 Aug 1; 50(22):
+    4310–4319
 
-    :arg1: TODO
-    :returns: TODO
+    :wavelength:
+    :grating_pitch:
+    :intergrating_distance:
+    :diameter: diameter of the spheres
+    :volume_fraction: fraction of the volume occupied by the microspheres
+    :delta_chi_squared: difference in refractive index squared
+    :real_space_sampling: sampling in real space, recommended value
+        np.linspace(
+            -4 * autocorrelation_length,
+            4 * autocorrelation_length,
+            2048,
+            endpoint=False,
+        )
+    :returns: the dark field extinction coefficient μ_d
 
     """
 
