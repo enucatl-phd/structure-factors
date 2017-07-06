@@ -65,8 +65,8 @@ def dark_field_extinction_coefficient(
         structure_factor_function=lambda *args: 1):
     """
     Function to calculate the DFEC Coefficient
-    For a spherical model from Appl Opt. 2011 Aug 1; 50(22):
-    4310–4319
+
+    https://www.nature.com/articles/srep35259
 
     :wavelength:
     :grating_pitch:
@@ -139,5 +139,6 @@ def dark_field_extinction_coefficient(
     log.debug("autocorrelation1 %g", autocorrelation1)
 
     dfec = autocorrelation_values[0] - autocorrelation1
+
     log.debug("saxs dfec %g", dfec)
     return dfec
